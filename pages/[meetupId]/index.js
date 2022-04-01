@@ -13,10 +13,29 @@ function MeetupDetails(props) {
   );
 }
 
+export function getStaticPaths() {
+  return {
+    fallback: false,
+    paths: [
+      {
+        params: {
+          meetupId: 'm1',
+        },
+      },
+      {
+        params: {
+          meetupId: 'm2',
+        },
+      },
+    ],
+  };
+}
+
 export async function getStaticProps(context) {
   // fetch data for a single meetup
   const meetupId = context.params.meetupId; // contains the dynamic URL part
 
+  // this will be only seen in the terminal(on the Developer Server-side), not in the Browser
   console.log(meetupId);
 
   return {
