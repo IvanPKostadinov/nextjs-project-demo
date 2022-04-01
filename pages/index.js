@@ -41,6 +41,8 @@ export async function getStaticProps() {
     // these props will be set as props of the Page Component:
     props: {
       meetups: DUMMY_MEETUPS,
+      // out page will be auto re-generated on the Server every 10 seconds:
+      revalidate: 10,
     },
   };
 }
