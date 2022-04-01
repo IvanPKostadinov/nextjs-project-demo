@@ -32,32 +32,32 @@ function HomePage(props) {
   return <MeetupList meetups={props.meetups} />;
 }
 
-export async function getServerSideProps(context) {
-  const req = context.req;  // incoming Request
-  const res = context.res;  // Response
+// export async function getServerSideProps(context) {
+//   const req = context.req;  // incoming Request
+//   const res = context.res;  // Response
 
-  // fetch data from an API. May use credentials
+//   // fetch data from an API. May use credentials
 
-  return {
-    props: {
-      meetups: DUMMY_MEETUPS
-    }
-  }
-}
-
-// // If we fetch data after rendering the Component that we want to show in the Source Code in the Browser:
-// // This function is called BEFORE the Component function!
-// // If async -> Next.js will wait for this data to be loaded, before it executes the Comp. function!
-// export async function getStaticProps() {
-//   // fetch data from an API
 //   return {
-//     // these props will be set as props of the Page Component:
 //     props: {
-//       meetups: DUMMY_MEETUPS,
-//       // out page will be auto re-generated on the Server every 10 seconds:
-//       revalidate: 10,
-//     },
-//   };
+//       meetups: DUMMY_MEETUPS
+//     }
+//   }
 // }
+
+// If we fetch data after rendering the Component that we want to show in the Source Code in the Browser:
+// This function is called BEFORE the Component function!
+// If async -> Next.js will wait for this data to be loaded, before it executes the Comp. function!
+export async function getStaticProps() {
+  // fetch data from an API
+  return {
+    // these props will be set as props of the Page Component:
+    props: {
+      meetups: DUMMY_MEETUPS,
+      // out page will be auto re-generated on the Server every 10 seconds:
+      revalidate: 10,
+    },
+  };
+}
 
 export default HomePage;
