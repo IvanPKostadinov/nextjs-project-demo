@@ -3,13 +3,13 @@ import { MongoClient } from 'mongodb';
 // domain.com/api/new-meetup
 
 const USER_NAME = 'ivanpkostadinov';
-const USER_PASSWORD = 'GCRJ2agW5xYdpPeh';
+const USER_PASSWORD = 'FsFvDlScnESbAXI9';
 const DATABASE_NAME = 'meetups';
 
 async function handler(req, res) {
   if (req.method === 'POST') {
     // triggered in: POST to domain.com/api/new-meetup
-    const data = req.data;
+    const data = req.body;
 
     // const { title, image, address, description } = data;
 
