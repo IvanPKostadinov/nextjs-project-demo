@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+import Head from 'next/head';
 import { MongoClient } from 'mongodb';
 
 import MeetupList from '../components/meetups/MeetupList';
@@ -21,7 +23,18 @@ function HomePage(props) {
   //   setLoadedMeetups(DUMMY_MEETUPS);
   // }, []);
 
-  return <MeetupList meetups={props.meetups} />;
+  return (
+    <Fragment>
+      <Head>
+        <title>React Meetups</title>
+        <meta
+          name='description'
+          content='Find a huge list of active meetups!'
+        />
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </Fragment>
+  );
 }
 
 // export async function getServerSideProps(context) {
@@ -53,14 +66,14 @@ export async function getStaticProps() {
 
   const meetupsCollection = db.collection('meetups'); // may have different name from DATABASE_NAME
 
-  const meetups =  await meetupsCollection.find().toArray();
+  const meetups = await meetupsCollection.find().toArray();
 
   return {
     // these props will be set as props of the Page Component:
     props: {
       // meetups: DUMMY_MEETUPS,
       // we .map() because of the auto-generated _id in mongodb
-      meetups: meetups.map(meetup => ({
+      meetups: meetups.map((meetup) => ({
         id: meetup._id.toString(),
         title: meetup.title,
         image: meetup.image,
