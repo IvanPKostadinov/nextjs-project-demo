@@ -1,25 +1,17 @@
-import { useEffect, useState } from 'react';
+import { MongoClient } from 'mongodb';
 
 import MeetupList from '../components/meetups/MeetupList';
 
-const DUMMY_MEETUPS = [
-  {
-    id: 'm1',
-    title: 'A First Meetup',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG/1280px-Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG',
-    address: 'Some address 5',
-    description: 'This is a First Meetup',
-  },
-  {
-    id: 'm2',
-    title: 'A Second Meetup',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG/1280px-Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG',
-    address: 'Some address 10',
-    description: 'This is a Second Meetup',
-  },
-];
+// const DUMMY_MEETUPS = [
+//   {
+//     id: 'm1',
+//     title: 'A First Meetup',
+//     image:
+//       'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG/1280px-Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG',
+//     address: 'Some address 5',
+//     description: 'This is a First Meetup',
+//   },
+// ];
 
 function HomePage(props) {
   // const [loadedMeetups, setLoadedMeetups] = useState([]);
@@ -49,11 +41,31 @@ function HomePage(props) {
 // This function is called BEFORE the Component function!
 // If async -> Next.js will wait for this data to be loaded, before it executes the Comp. function!
 export async function getStaticProps() {
+  const USER_NAME = 'ivanpkostadinov';
+  const USER_PASSWORD = 'FsFvDlScnESbAXI9';
+  const DATABASE_NAME = 'meetups';
+
   // fetch data from an API
+  const client = await MongoClient.connect(
+    `mongodb+srv://${USER_NAME}:${USER_PASSWORD}@cluster0.mhrjm.mongodb.net/${DATABASE_NAME}?retryWrites=true&w=majority`
+  );
+  const db = client.db();
+
+  const meetupsCollection = db.collection('meetups'); // may have different name from DATABASE_NAME
+
+  const meetups =  await meetupsCollection.find().toArray();
+
   return {
     // these props will be set as props of the Page Component:
     props: {
-      meetups: DUMMY_MEETUPS,
+      // meetups: DUMMY_MEETUPS,
+      // we .map() because of the auto-generated _id in mongodb
+      meetups: meetups.map(meetup => ({
+        id: meetup._id.toString(),
+        title: meetup.title,
+        image: meetup.image,
+        address: meetup.address,
+      })),
       // out page will be auto re-generated on the Server every 10 seconds:
       revalidate: 10,
     },
